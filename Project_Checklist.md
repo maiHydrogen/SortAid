@@ -6,12 +6,12 @@
 ## 🔧 Phase 1: Project Setup & Planning
 **Goal:** Establish the project structure, tools, and shared understanding.
 
-- [ ] Create project root folder with `frontend/`, `backend/`, and `scrapers/` subfolders.
-- [ ] Initialize frontend with `Vite` or `Create React App`.
-- [ ] Initialize backend with `npm init` and install Express.
-- [ ] Set up MongoDB (local or Atlas), and install `mongoose`.
-- [ ] Create a `.env` file with variables (Mongo URI, ports, etc.).
-- [ ] Set up GitHub repo and `.gitignore`.
+- [x] Create project root folder with `frontend/`, `backend/`, and `scrapers/` subfolders.
+- [x] Initialize frontend with `Vite` or `Create React App`.
+- [x] Initialize backend with `npm init` and install Express.
+- [] Set up MongoDB (local or Atlas), and install `mongoose`.
+- [x] Create a `.env` file with variables (Mongo URI, ports, etc.).
+- [x] Set up GitHub repo and `.gitignore`.
 - [ ] Install Python and required scraping libraries: `beautifulsoup4`, `scrapy`, `pymongo`.
 
 ---
