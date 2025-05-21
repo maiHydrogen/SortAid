@@ -1,7 +1,6 @@
-// routes/profile.js
 const express = require('express');
 const router = express.Router();
-const StudentProfile = require('../models/StudentProfile'); // Adjust the path if needed
+const StudentProfile = require('../models/StudentProfile');
 
 // POST: Create or update a student profile
 router.post('/', async (req, res) => {
@@ -24,9 +23,21 @@ router.post('/', async (req, res) => {
         await profile.save();
         res.status(201).json(profile);
     } catch (err) {
-        console.error(err);
         res.status(500).json({ error: 'Server error' });
     }
 });
 
-module.exports = router; // Don’t forget this!
+// GET: Retrieve a student profile
+router.get('/:userId', async (req, res) => {
+    try {
+        const profile = await StudentProfile.findOne({ userId: req.params.userId });
+        if (!profile) {
+            return res.status(404).json({ error: 'Profile not found' });
+        }
+        res.json(profile);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+module.exports = router;

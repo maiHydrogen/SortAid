@@ -1,14 +1,26 @@
 const express = require('express');
-const app = express();
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const profileRoutes = require('./routes/profile');
+const scholarshipRoutes = require('./routes/scholarships');
 
-// Middleware to parse JSON
+dotenv.config();
+
+const app = express();
 app.use(express.json());
 
-// Routes
-const profileRoutes = require('./routes/profile'); // Ensure the path matches your folder structure
-app.use('/api/profile', profileRoutes);
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI, {})
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
-// Start the server
-app.listen(8000, () => {
-    console.log('Server running on port 8000');
+// Routes
+app.use('/api/profile', profileRoutes);
+app.use('/api/scholarships', scholarshipRoutes);
+
+app.get('/', (req, res) => {
+    res.json({ message: 'Scholarship Finder Backend' });
 });
+
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
