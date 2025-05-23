@@ -19,10 +19,10 @@
 ## 🗃️ Phase 2: Database Design
 **Goal:** Design MongoDB collections and implement CRUD with Mongoose.
 
-- [ ] Define **StudentProfile** schema
-- [ ] Define **Scholarship** schema
-- [ ] Create Mongoose models and validate with sample data.
-- [ ] Implement basic CRUD endpoints (GET/POST/PUT/DELETE) for both collections.
+- [x] Define **StudentProfile** schema
+- [x] Define **Scholarship** schema
+- [x] Create Mongoose models and validate with sample data.
+- [x] Implement basic CRUD endpoints (GET/POST/PUT/DELETE) for both collections.
 
 ---
 
