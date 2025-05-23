@@ -5,8 +5,8 @@ import time
 from datetime import datetime
 
 # Connect to MongoDB Atlas
-client = MongoClient("mongodb+srv://himanshu011raj:TzKbVSIJ9vYAEMTF@cluster0.ibr2mwi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-db = client["scholarship_finder"]
+client = MongoClient("mongodb+srv://himanshu011raj:TzKbVSIJ9vYAEMTF@cluster0.ibr2mwi.mongodb.net/SortAid?retryWrites=true&w=majority&appName=Cluster0")
+db = client["SortAid"]
 scholarships_collection = db["scholarships"]
 
 # Headers to mimic a browser
