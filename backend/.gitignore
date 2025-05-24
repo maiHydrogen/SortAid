@@ -5,4 +5,4 @@ venv
 /node_modules
 /.pnp
 .pnp.js
-.yarn/install-state.gz
+.yarn/install-state.gznode_modules/
