@@ -38,109 +38,107 @@ headers = {
     "Upgrade-Insecure-Requests": "1"
 }
 
-# Standardize the data format
-def normalize_data(title, amount, eligibility, deadline, link, source):
-    return {
-        "title": title.strip(),
-        "source": source,
-        "amount": amount.strip() if amount else "Not specified",
-        "eligibility": eligibility if eligibility else {"course": "Engineering", "gpa": 2.0, "location": "Any"},  # Default for now
-        "deadline": deadline.strip() if deadline else "Not specified",
-        "applicationLink": link,
-        "scrapedAt": datetime.utcnow()
-    }
-
-# Parse eligibility from the detail page
-def scrape_eligibility(detail_url):
-    eligibility = {"course": "Engineering", "gpa": 2.0, "location": "Any"}
+# Function to get the total number of pages
+def get_total_pages(url):
     try:
-        response = requests.get(detail_url, headers=headers, timeout=10)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()
-        soup = BeautifulSoup(response.text, "html.parser")
-        
-        # Placeholder selector for eligibility - we'll update this once we have the detail page HTML
-        eligibility_section = soup.select_one("div.eligibility, p.eligibility, div#scholarship-details")
-        if eligibility_section:
-            eligibility_text = eligibility_section.text
-            if "GPA" in eligibility_text:
-                gpa_str = eligibility_text.split("GPA:")[1].split(",")[0].strip()
-                eligibility["gpa"] = float(gpa_str) if gpa_str.replace('.', '', 1).isdigit() else 2.0
-            if "Location:" in eligibility_text:
-                location = eligibility_text.split("Location:")[1].split(",")[0].strip()
-                eligibility["location"] = location if location else "Any"
-        return eligibility
-    except Exception as e:
-        logging.error(f"Error scraping eligibility from {detail_url}: {e}")
-        return eligibility
+        soup = BeautifulSoup(response.text, 'html.parser')
+        pagination = soup.find('ul', class_='pagination-items')
+        if pagination:
+            last_page = int(pagination.find_all('li')[-2].text)
+            return last_page
+        return 1
+    except requests.RequestException as e:
+        logging.error(f"Failed to get total pages: {e}")
+        return 1
 
-# Scrape Scholarships.com
-def scrape_scholarships_com():
-    base_url = "https://www.scholarships.com/financial-aid/college-scholarships/scholarship-directory/academic-major/engineering"
-    scholarships = []
-    page = 1
-    max_pages = 3  # Limit to 3 pages for now
+# Function to scrape scholarship data from a single page
+def scrape_scholarships_from_page(url):
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-    while page <= max_pages:
-        url = f"{base_url}?sortOrder=title&sortDirection=asc&page={page}"
-        logging.info(f"Scraping page {page}: {url}")
-        try:
-            response = requests.get(url, headers=headers, timeout=10)
-            response.raise_for_status()
-        except requests.RequestException as e:
-            logging.error(f"Failed to fetch page {page}: {e}")
-            break
+        scholarships = []
+        scholarship_cards = soup.find_all('div', class_='re-scholarship-card-data-wrap')
 
-        soup = BeautifulSoup(response.text, "html.parser")
-        scholarship_rows = soup.select("table#award-grid tbody tr")
+        for card in scholarship_cards:
+            scholarship = {}
+            # Title and application link (from the <a> tag in the title)
+            title_elem = card.find('h4', class_='re-verified_title').find('a')
+            scholarship['title'] = title_elem.text.strip() if title_elem else 'N/A'
+            scholarship['applicationLink'] = title_elem['href'] if title_elem and 'href' in title_elem.attrs else 'N/A'
 
-        if not scholarship_rows:
-            logging.warning("No scholarships found on this page. Selector might be wrong.")
-            break
+            # Source (provider)
+            provider_elem = card.find('div', class_='re-scholarship-card-mob_top').find('p')
+            scholarship['source'] = provider_elem.text.strip() if provider_elem else 'N/A'
 
-        for row in scholarship_rows:
+            # Amount
+            award_elem = card.find('span', class_='re-scholarship-card-info-value')
+            scholarship['amount'] = award_elem.text.strip() if award_elem else 'N/A'
+
+            # Deadline
+            deadline_elem = card.find_all('span', class_='re-scholarship-card-info-value')[1]
+            scholarship['deadline'] = deadline_elem.text.strip() if deadline_elem else 'N/A'
+
+            # Eligibility (inferred or default values)
+            desc_elem = card.find('div', class_='re-scholarship-card-main-hidden').find('p')
+            description = desc_elem.text.strip() if desc_elem else 'N/A'
+            
+            # Infer course and location from description if possible (basic approach)
+            scholarship['eligibility'] = {
+                'course': 'Any high school and College Course',  # Could parse description for keywords like "undergraduate", "graduate"
+                'gpa': None,      # Not available in the data
+                'location': 'US'  # parse description for location keywords
+            }
+            #application link
+            scholarship['applicationLink'] = 'https://scholarships360.org/scholarships/search/'
+
+            # Scraped timestamp
+            scholarship['scrapedAt'] = datetime.now()
+
+            scholarships.append(scholarship)
+
+        return scholarships
+    except requests.RequestException as e:
+        logging.error(f"Failed to scrape {url}: {e}")
+        return []
+
+# Function to handle pagination and scrape all pages
+def scrape_all_scholarships(base_url):
+    all_scholarships = []
+    total_pages = get_total_pages(base_url)
+    logging.info(f"Total pages detected: {total_pages}")
+
+    for page in range(1, total_pages + 1):
+        page_url = f"{base_url}?page={page}" if page > 1 else base_url
+        logging.info(f"Scraping page {page}...")
+        scholarships = scrape_scholarships_from_page(page_url)
+        all_scholarships.extend(scholarships)
+        logging.info(f"Scraped {len(scholarships)} scholarships from page {page}")
+
+        # Insert scholarships into MongoDB
+        if scholarships:
             try:
-                title_elem = row.select_one("td a.blacklink")
-                title = title_elem.text.strip() if title_elem else "Unknown"
-                link = title_elem["href"] if title_elem else ""
-                if link and not link.startswith("http"):
-                    link = "https://www.scholarships.com" + link
+                collection.insert_many(scholarships, ordered=False)
+                logging.info(f"Inserted {len(scholarships)} scholarships into MongoDB from page {page}")
+            except BulkWriteError as e:
+                logging.error(f"Error inserting scholarships from page {page}: {e}")
 
-                amount_elem = row.select_one("td span")
-                amount = amount_elem.text.strip() if amount_elem else "Not specified"
+        # Add a 1-second delay to be polite to the server
+        time.sleep(1)
 
-                deadline_elem = row.find("td", string=lambda text: text and "Due Date:" in text)
-                deadline = deadline_elem.text.replace("Due Date:", "").strip() if deadline_elem else "Not specified"
+    return all_scholarships
 
-                # Scrape eligibility from the detail page
-                eligibility = scrape_eligibility(link) if link else None
+# Base URL of the page to scrape
+base_url = "https://scholarships360.org/scholarships/search/"
 
-                scholarship = normalize_data(title, amount, eligibility, deadline, link, "Scholarships.com")
-                scholarships.append(scholarship)
-                logging.info(f"Scraped scholarship: {title}")
-                time.sleep(1)
-            except Exception as e:
-                logging.error(f"Error scraping scholarship: {e}")
-                continue
-
-        # Check for pagination (placeholder - we'll update this once we have pagination HTML)
-        next_page = soup.select_one("a.next-page")  # Placeholder selector
-        if next_page and "href" in next_page.attrs:
-            page += 1
-        else:
-            break
-        time.sleep(2)
-
-    return scholarships
-
-# Main function
-def main():
-    print("Starting scraper for Scholarships.com...")
-    all_scholarships = scrape_scholarships_com()
-    if all_scholarships:
-        scholarships_collection.insert_many(all_scholarships)
-        print(f"Inserted {len(all_scholarships)} scholarships into MongoDB")
-    else:
-        print("No scholarships found")
-
-if __name__ == "__main__":
-    main()
+# Scrape all scholarships and store in MongoDB
+try:
+    scholarship_data = scrape_all_scholarships(base_url)
+    logging.info(f"Scraped and stored {len(scholarship_data)} scholarships in total")
+    print(f"Scraped and stored {len(scholarship_data)} scholarships in MongoDB")
+finally:
+    client.close()
+    logging.info("MongoDB connection closed")
