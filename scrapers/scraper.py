@@ -4,14 +4,29 @@ from pymongo import MongoClient
 import time
 from datetime import datetime
 import logging
+import os
+from dotenv import load_dotenv
+from pymongo.errors import ConnectionError, BulkWriteError
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the MongoDB URL
+MONGODB_URI = os.getenv('MONGODB_URI')
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='scraper.log', level=logging.INFO, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Connect to MongoDB Atlas (replace with your credentials)
-client = MongoClient("mongodb+srv://himanshu011raj:TzKbVSIJ9vYAEMTF@cluster0.ibr2mwi.mongodb.net/SortAid?retryWrites=true&w=majority&appName=Cluster0")
-db = client["SortAid"]
-scholarships_collection = db["scholarships"]
+# Connect to MongoDB Atlas
+try:
+    client = MongoClient(MONGODB_URI)
+    db = client['SortAid']
+    collection = db['scholarships']
+    logging.info("Connected to MongoDB Atlas")
+except ConnectionError as e:
+    logging.error(f"Failed to connect to MongoDB: {e}")
+    raise
 
 # Headers to mimic a browser
 headers = {
