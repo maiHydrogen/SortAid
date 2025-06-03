@@ -29,12 +29,12 @@
 ## 🕷️ Phase 3: Web Scraper Development
 **Goal:** Extract, clean, and store real scholarship data.
 
-- [ ] Set up Python script structure
-- [ ] Extract: `title`, `amount`, `eligibility`, `deadline`, `link`
-- [ ] Handle pagination
+- [x] Set up Python script structure
+- [x] Extract: `title`, `amount`, `eligibility`, `deadline`, `link`
+- [x] Handle pagination
 - [ ] Normalize data
-- [ ] Connect to MongoDB via `pymongo`
-- [ ] Add logging and exception handling
+- [x] Connect to MongoDB via `pymongo`
+- [x] Add logging and exception handling
 - [ ] Schedule scrapers using cron or backend-trigger
 
 ---
