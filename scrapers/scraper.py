@@ -6,25 +6,33 @@ from datetime import datetime
 import logging
 import os
 from dotenv import load_dotenv
-from pymongo.errors import ConnectionError, BulkWriteError
+from pymongo.errors import ConnectionFailure, BulkWriteError
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Get the MongoDB URL
-MONGODB_URI = os.getenv('MONGODB_URI')
+# Load environment variables from .env file located in the parent directory
+env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'backend\.env')
+if not os.path.exists(env_path):
+    logging.error(f".env file not found at {env_path}")
+    raise FileNotFoundError(f".env file not found at {env_path}")
+load_dotenv(env_path)
 
 # Set up logging
 logging.basicConfig(filename='scraper.log', level=logging.INFO, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Connect to MongoDB Atlas
+MONGODB_URI = os.getenv("MONGODB_URI")
+if not MONGODB_URI:
+    logging.error("MONGODB_URI not found in .env file")
+    raise ValueError("MONGODB_URI not found in .env file")
+
+logging.info(f"Using MongoDB URI: {MONGODB_URI[:50]}... (masked for security)")
+
 try:
     client = MongoClient(MONGODB_URI)
     db = client['SortAid']
     collection = db['scholarships']
     logging.info("Connected to MongoDB Atlas")
-except ConnectionError as e:
+except ConnectionFailure as e:
     logging.error(f"Failed to connect to MongoDB: {e}")
     raise
 
