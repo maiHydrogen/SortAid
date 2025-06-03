@@ -16,7 +16,7 @@ if not os.path.exists(env_path):
 load_dotenv(env_path)
 
 # Set up logging
-logging.basicConfig(filename='scraper.log', level=logging.INFO, 
+logging.basicConfig(filename='scraping.log', level=logging.INFO, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Connect to MongoDB Atlas
