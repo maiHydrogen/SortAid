@@ -1,24 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Navbar from './components/Navbar';
+import Login from './components/Login';
+import Register from './components/Register';
+import Profile from './components/Profile';
+import ScholarshipList from './components/ScholarshipList';
+import React , {useState} from 'react';
+import { Router ,Route ,Routes , Navigate } from 'react-router-dom'
+import HomePage from './components/HomePage';
 
 function App() {
-
+  const[isAuthenticated,setisAuthenticated]=useState(false);
   return (
     <>
-      <div class="container">
-        <h1>Scholarship Finder</h1>
-        <form id="scholarshipform">
-            <input type="text" name="course" placeholder="Course of Study" required />
-            <input type="text" name="cgpa" placeholder="Grades" required />
-            <input type="text" name="location" placeholder="Location" required />
-            <input type="text" name="income" placeholder="Income Status" required />
-            <input type="text" name="interests" placeholder="Interests" required />
-            <button type="submit">Find Scholarship</button>
-        </form>
-        <div id="results"></div>
-    </div>
+      <Navbar isAuthenticated={isAuthenticated}/>
+      <Routes>
+      <Route path="/" element={<Navigate to="/login"/>}/>
+      <Route path='/login' element={<Login onLogin={()=>setisAuthenticated(true)}/>}/>
+      <Route path='/register' element={<Register onRegister={()=>setisAuthenticated(true)}/>}/>
+      <Route path='/home' element={isAuthenticated ? <HomePage/> : <Navigate to="/login"/>}/> 
+      <Route path='/scholarships' element={isAuthenticated ? <ScholarshipList/> : <Navigate to="/login"/>}/>
+      <Route path='/profile' element={isAuthenticated ? <Profile/> : <Navigate to="/login"/>}/>
+     </Routes>
     </>
   )
 }
