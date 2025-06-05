@@ -19,22 +19,22 @@
 ## 🗃️ Phase 2: Database Design
 **Goal:** Design MongoDB collections and implement CRUD with Mongoose.
 
-- [ ] Define **StudentProfile** schema
-- [ ] Define **Scholarship** schema
-- [ ] Create Mongoose models and validate with sample data.
-- [ ] Implement basic CRUD endpoints (GET/POST/PUT/DELETE) for both collections.
+- [x] Define **StudentProfile** schema
+- [x] Define **Scholarship** schema
+- [x] Create Mongoose models and validate with sample data.
+- [x] Implement basic CRUD endpoints (GET/POST/PUT/DELETE) for both collections.
 
 ---
 
 ## 🕷️ Phase 3: Web Scraper Development
 **Goal:** Extract, clean, and store real scholarship data.
 
-- [ ] Set up Python script structure
-- [ ] Extract: `title`, `amount`, `eligibility`, `deadline`, `link`
-- [ ] Handle pagination
+- [x] Set up Python script structure
+- [x] Extract: `title`, `amount`, `eligibility`, `deadline`, `link`
+- [x] Handle pagination
 - [ ] Normalize data
-- [ ] Connect to MongoDB via `pymongo`
-- [ ] Add logging and exception handling
+- [x] Connect to MongoDB via `pymongo`
+- [x] Add logging and exception handling
 - [ ] Schedule scrapers using cron or backend-trigger
 
 ---
