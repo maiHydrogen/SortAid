@@ -35,3 +35,7 @@
 .register-form button:hover {
   background-color: #15803d;
 }
+.register-container p{
+  padding-left: 100px; 
+  margin-top: 40px;
+}

@@ -15,8 +15,16 @@ const Navbar = ({ isAuthenticated }) => {
           </>
         ) : (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
+          <div className="linkcontainer">
+          <div className="start">
+            <Link to="/home" >Home</Link>
+            <Link to="/scholarships">Find Scholarships</Link>
+          </div>
+          <div className="last">
+            <Link to="/login" className="login">Login</Link>
+            <Link to="/register" className="register">Register</Link>
+          </div>
+          </div>
           </>
         )}
       </div>

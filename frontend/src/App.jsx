@@ -13,10 +13,10 @@ function App() {
     <>
       <Navbar isAuthenticated={isAuthenticated}/>
       <Routes>
-      <Route path="/" element={<Navigate to="/login"/>}/>
+      <Route path="/" element={<Navigate to="/home"/>}/>
       <Route path='/login' element={<Login onLogin={()=>setisAuthenticated(true)}/>}/>
       <Route path='/register' element={<Register onRegister={()=>setisAuthenticated(true)}/>}/>
-      <Route path='/home' element={isAuthenticated ? <HomePage/> : <Navigate to="/login"/>}/> 
+      <Route path='/home' element={<HomePage/>}/> 
       <Route path='/scholarships' element={isAuthenticated ? <ScholarshipList/> : <Navigate to="/login"/>}/>
       <Route path='/profile' element={isAuthenticated ? <Profile/> : <Navigate to="/login"/>}/>
      </Routes>
