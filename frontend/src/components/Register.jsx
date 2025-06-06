@@ -1,6 +1,7 @@
 import React, { useState ,useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
+import { Link } from "react-router-dom";
 import "./Register.css";
 
 const Register = ({ onRegister }) => {
@@ -77,6 +78,7 @@ const Register = ({ onRegister }) => {
         />
         <button type="submit">Register</button>
       </form>
+      <p>Already have an account ? <Link to="/login">Login</Link></p>
     </div>
     </>
   );
