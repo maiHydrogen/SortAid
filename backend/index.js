@@ -19,7 +19,7 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/scholarships', scholarshipRoutes);
 
 app.get('/', (req, res) => {
-    res.json({ message: 'Scholarship Finder Backend' });
+    res.json({ message: 'SortAid Backend' });
 });
 
 const PORT = process.env.PORT || 8000;
