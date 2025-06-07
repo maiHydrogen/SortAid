@@ -1,6 +1,52 @@
 const express = require('express');
 const router = express.Router();
 const StudentProfile = require('../models/StudentProfile');
+module.exports=router;
+
+const User = require("../models/User"); // assuming you have this
+
+// Login Route
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email, password });
+    if (!user) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+    res.json({ message: "Login successful", userId: user._id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Register Route
+router.post("/register", async (req, res) => {
+  const { name, email, password, gpa, location, course } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "User already exists" });
+    }
+
+    const newUser = new User({
+      name,
+      email,
+      password, // ⚠ For security: hash this before storing in production!
+      gpa,
+      location,
+      course,
+    });
+
+    await newUser.save();
+    res.status(201).json({ message: "User registered", userId: newUser._id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error during registration" });
+  }
+});
 
 // POST: Create or update a student profile
 router.post('/', async (req, res) => {

@@ -1,0 +1,51 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #16a34a;
+}
+.linkcontainer{
+  display: flex;
+}
+.last{
+  margin-left: 50rem;
+}
+.last a{
+  padding: 5px 10px 5px 10px;
+  margin-left: 1rem;
+  border-radius: 10px;
+}
+.login{
+  background-color: #16a34a;
+  color:white;
+}
+.register{
+  border: 1px solid #16a34a;
+  color: #16a34a;
+}
+.navbar-links a {
+  text-decoration: none;
+  font-weight: 500;
+}
+.start a{
+  margin-left: 3rem;
+  color: #4b5563;
+}
+.start a:hover{
+  color: #16a34a;
+}
+.authen a{
+  margin-left: 3rem;
+  color: #4b5563;
+}
+.authen a:hover{
+  color: #16a34a;
+}
