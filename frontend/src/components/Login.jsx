@@ -8,30 +8,11 @@ const Login = ({ onLogin }) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  try {
-    const response = await fetch("http://localhost:8000/api/profile/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      onLogin(); // set isAuthenticated = true
-      localStorage.setItem("userId", data.userId); // Save user ID if needed
-      navigate("/home");
-    } else {
-      alert(data.error || "Invalid credentials");
-    }
-  } catch (err) {
-    console.error("Login error:", err);
-    alert("Server error. Try again later.");
-  }
-};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onLogin();
+    navigate("/home");
+  };
 
   return (
     <>
