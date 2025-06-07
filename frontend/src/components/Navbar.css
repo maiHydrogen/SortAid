@@ -42,3 +42,10 @@
 .start a:hover{
   color: #16a34a;
 }
+.authen a{
+  margin-left: 3rem;
+  color: #4b5563;
+}
+.authen a:hover{
+  color: #16a34a;
+}

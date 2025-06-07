@@ -1,44 +1,24 @@
 .profile-container {
-  max-width: 500px;
-  margin: 40px auto;
-  padding: 30px;
-  border: 1px solid #ddd;
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
   border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 128, 0, 0.2);
   background-color: #fdfdfd;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .profile-container h2 {
   text-align: center;
-  color: #333;
-  margin-bottom: 25px;
+  color: green;
+  margin-bottom: 20px;
 }
 
-.profile-details p,
-.profile-details input {
+.profile-field {
+  margin-bottom: 10px;
   font-size: 16px;
-  color: #444;
-  margin: 12px 0;
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
 }
 
-.profile-details input {
-  background-color: #f7f7f7;
-}
-
-button {
-  margin: 10px 10px 0 0;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  background-color:  #16a34a;
-  color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color:  #15803d;
+.profile-field span {
+  margin-left: 10px;
+  color: #333;
 }

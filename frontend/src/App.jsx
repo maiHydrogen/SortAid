@@ -18,7 +18,7 @@ function App() {
       <Route path='/register' element={<Register onRegister={()=>setisAuthenticated(true)}/>}/>
       <Route path='/home' element={<HomePage/>}/> 
       <Route path='/scholarships' element={isAuthenticated ? <ScholarshipList/> : <Navigate to="/login"/>}/>
-      <Route path='/profile' element={isAuthenticated ? <Profile/> : <Navigate to="/login"/>}/>
+      <Route path='/profile' element={<Profile/>}/>
      </Routes>
     </>
   )
