@@ -9,9 +9,11 @@ const Navbar = ({ isAuthenticated }) => {
       <div className="navbar-links">
         {isAuthenticated ? (
           <>
+          <div className="authen">
             <Link to="/home">Home</Link>
             <Link to="/scholarships">Find Scholarships</Link>
             <Link to="/profile">Profile</Link>
+          </div>
           </>
         ) : (
           <>
