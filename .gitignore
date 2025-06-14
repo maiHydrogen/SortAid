@@ -2,3 +2,5 @@
 /scrapers/venv/
 /scrapers/scraping.log
 /scrapers/fastweb_scraper.log
+node_modules
+.venv
