@@ -15,46 +15,15 @@ const Register = ({ onRegister }) => {
   const navigate = useNavigate();
   const{setUser}=useContext(UserContext);
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  const userdata = {
-    name,
-    email,
-    password,
-    gpa: grades,
-    location,
-    course,
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const userdata ={
+      name,email,password,grades,location,course,
+    };
+    setUser(userdata);
+    onRegister();
+    navigate("/home");
   };
-  try {
-    console.log("sending data to backend",userdata);
-    const response = await fetch("http://localhost:8000/api/profile/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userdata),
-    });
-
-    const data = await response.json();
-    console.log("backend response",data);
-    if (response.ok) {
-      setUser(userdata);
-      onRegister();
-      navigate("/home");
-    } else {
-      alert(data.error || "Registration failed");
-    }
-  } catch (error) {
-    console.error("Registration error:", error);
-    alert("Server error during registration");
-  }
-  axios.post('http://localhost:8000/api/profile', {
-  userId: email,
-  gpa: grades,
-  course,
-  location,
-  interests: [],
-});
-};
 
   return (
     <>
