@@ -1,4 +1,58 @@
-/.vs
-/scrapers/venv/
-/scrapers/scraping.log
-/scrapers/fastweb_scraper.log
+# Editor directories and files
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.vs/
+
+# Virtual environments (Python)
+.venv/
+venv/
+
+# Log files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+scrapers/scraping.log
+scrapers/fastweb_scraper.log
+scrapers/*.log
+
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+.yarn/install-state.gz
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+.next/
+out/
+
+# Local environment files
+.env
+.env*.local
+*.local
+
+# Coverage
+coverage/
+
+# Vercel
+.vercel/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Misc
+*.pem
