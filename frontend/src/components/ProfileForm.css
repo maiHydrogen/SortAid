@@ -1,0 +1,55 @@
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.profile-form-row {
+  display: flex;
+  gap: 0.9rem;
+}
+.profile-form-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-form input {
+  padding: 0.85rem 1.1rem;
+  border: 1.6px solid var(--color-text-on-light);
+  border-radius: var(--radius-input);
+  font-size: 0.92rem;
+  color: var(--color-text-on-light);
+  background: #fff;
+}
+
+.profile-form input::placeholder {
+  color: #8a8d93;
+}
+
+.profile-form-submit {
+  align-self: center;
+  margin-top: 0.4rem;
+  padding: 0.85rem 2.6rem;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.02rem;
+  transition: background 0.15s ease;
+}
+.profile-form-submit:hover {
+  background: var(--color-accent-hover);
+}
+
+.profile-form-status {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text-on-light-muted);
+}
+
+/* Page variant: wider, centered, card container supplied by Profile.jsx */
+.profile-form--page {
+  max-width: 460px;
+  margin: 0 auto;
+}

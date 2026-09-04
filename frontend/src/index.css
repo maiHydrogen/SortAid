@@ -1,1 +1,92 @@
+:root {
+  /* Brand */
+  --color-primary: #f0481f;
+  --color-primary-hover: #d63c17;
+  --color-primary-soft: rgba(240, 72, 31, 0.12);
 
+  --color-accent: #5b6bf0;
+  --color-accent-hover: #4655d9;
+  --color-accent-soft: #eef0ff;
+
+  --color-green: #6fae47;
+  --color-green-dark: #588f37;
+  --color-green-soft: #dcf3d9;
+  --color-green-soft-text: #3f8f4a;
+
+  --color-coral: #e35a4a;
+
+  /* Surfaces */
+  --color-bg-dark: #131313;
+  --color-bg-dark-raised: #1c1c1c;
+  --color-bg-light: #fbfbfa;
+  --color-card: #ffffff;
+
+  /* Text */
+  --color-text-on-dark: #f6f6f4;
+  --color-text-on-dark-muted: #c9c9c6;
+  --color-text-on-light: #16181c;
+  --color-text-on-light-muted: #6b7280;
+  --color-border-light: #e2e2df;
+
+  /* Shape */
+  --radius-pill: 999px;
+  --radius-card: 20px;
+  --radius-input: 12px;
+
+  /* Type */
+  --font-display: "Unbounded", "Segoe UI", sans-serif;
+  --font-body: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text-on-light);
+  background: var(--color-bg-light);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  margin: 0;
+}
+
+p {
+  margin: 0;
+  font-family: var(--font-body);
+}
+
+a {
+  font-family: var(--font-body);
+}
+
+button,
+input,
+textarea {
+  font-family: var(--font-body);
+}
+
+button {
+  cursor: pointer;
+}
+
+input:focus,
+textarea:focus,
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}

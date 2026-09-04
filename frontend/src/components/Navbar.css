@@ -1,51 +1,178 @@
 .navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 2.5rem;
+  padding: 1.4rem 3rem;
+}
+
+.navbar--minimal {
+  justify-content: flex-end;
+}
+
+.navbar--dark {
+  background: var(--color-bg-dark);
+}
+
+.navbar--light {
+  background: var(--color-bg-light);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .navbar-brand {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #16a34a;
-}
-.linkcontainer{
   display: flex;
+  align-items: center;
+  gap: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  text-decoration: none;
+  white-space: nowrap;
 }
-.last{
-  margin-left: 50rem;
+
+.navbar-brand svg {
+  margin: 0 -1px;
 }
-.last a{
-  padding: 5px 10px 5px 10px;
-  margin-left: 1rem;
-  border-radius: 10px;
+
+.navbar--dark .navbar-brand {
+  color: var(--color-text-on-dark);
 }
-.login{
-  background-color: #16a34a;
-  color:white;
+
+.navbar--light .navbar-brand {
+  color: var(--color-text-on-light);
 }
-.register{
-  border: 1px solid #16a34a;
-  color: #16a34a;
+
+.navbar-links {
+  display: flex;
+  gap: 2.2rem;
+  flex: 1;
 }
+
 .navbar-links a {
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.15s ease;
 }
-.start a{
-  margin-left: 3rem;
-  color: #4b5563;
+
+.navbar--dark .navbar-links a {
+  color: var(--color-text-on-dark-muted);
 }
-.start a:hover{
-  color: #16a34a;
+.navbar--dark .navbar-links a:hover {
+  color: var(--color-text-on-dark);
 }
-.authen a{
-  margin-left: 3rem;
-  color: #4b5563;
+
+.navbar--light .navbar-links a {
+  color: var(--color-text-on-light);
 }
-.authen a:hover{
-  color: #16a34a;
+.navbar--light .navbar-links a:hover {
+  color: var(--color-primary);
+}
+
+.navbar-auth-toggle {
+  display: flex;
+  gap: 0.9rem;
+  margin-left: auto;
+}
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.6rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border: 1.6px solid var(--color-primary);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.pill-btn--filled {
+  background: var(--color-primary);
+  color: #fff;
+}
+.pill-btn--filled:hover {
+  background: var(--color-primary-hover);
+}
+
+.pill-btn--outline {
+  background: transparent;
+  color: var(--color-primary);
+}
+.pill-btn--outline:hover {
+  background: var(--color-primary-soft);
+}
+
+/* Authenticated user pill */
+.navbar-profile {
+  position: relative;
+  margin-left: auto;
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.35rem 0.35rem 0.35rem 1.4rem;
+  border-radius: var(--radius-pill);
+  border: 1.6px solid var(--color-primary);
+  background: transparent;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--color-primary);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.user-pill--active,
+.user-pill:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.user-pill-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  transition: background 0.15s ease;
+}
+
+.user-pill--active .user-pill-avatar,
+.user-pill:hover .user-pill-avatar {
+  background: var(--color-accent);
+}
+
+.navbar-profile-panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  width: 380px;
+  z-index: 40;
+  background: var(--color-card);
+  border: 1.6px solid var(--color-accent);
+  border-radius: var(--radius-card);
+  padding: 1.6rem;
+  box-shadow: 0 18px 40px rgba(20, 20, 20, 0.14);
+}
+
+@media (max-width: 860px) {
+  .navbar {
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.2rem 1.5rem;
+  }
+  .navbar-links {
+    order: 3;
+    width: 100%;
+    gap: 1.4rem;
+  }
+  .navbar-profile-panel {
+    width: min(380px, 90vw);
+    right: -1rem;
+  }
 }

@@ -1,0 +1,24 @@
+.site-footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+.site-footer hr {
+  border: none;
+  border-top: 1px solid rgba(246, 246, 244, 0.25);
+  margin-bottom: 1.2rem;
+}
+
+.site-footer-link {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-on-dark-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.site-footer-link:hover {
+  color: var(--color-text-on-dark);
+}

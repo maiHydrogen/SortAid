@@ -1,0 +1,140 @@
+/* Shared styling for the Login and Register pages. */
+.auth-page {
+  min-height: 100vh;
+  background: var(--color-bg-dark);
+  padding: 5rem 1.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auth-heading {
+  text-align: center;
+  max-width: 640px;
+}
+
+.auth-heading h1 {
+  color: var(--color-text-on-dark);
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.auth-heading p {
+  color: var(--color-text-on-dark-muted);
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.auth-card {
+  margin-top: 2.6rem;
+  width: 100%;
+  max-width: 460px;
+  background: #fbfbfa;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-card);
+  padding: 2.2rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form-row {
+  display: flex;
+  gap: 1rem;
+}
+.auth-form-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.auth-form input {
+  padding: 0.9rem 1.1rem;
+  border: 1.6px solid var(--color-text-on-light);
+  border-radius: var(--radius-input);
+  font-size: 0.95rem;
+  color: var(--color-text-on-light);
+  background: #fff;
+}
+.auth-form input::placeholder {
+  color: #8a8d93;
+}
+
+.auth-error {
+  color: var(--color-coral);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.auth-submit {
+  margin-top: 0.4rem;
+  padding: 0.9rem;
+  border: none;
+  border-radius: var(--radius-pill);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: opacity 0.15s ease;
+}
+.auth-submit:hover {
+  opacity: 0.9;
+}
+.auth-submit--primary {
+  background: var(--color-primary);
+}
+.auth-submit--green {
+  background: var(--color-green);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 1.6rem 0 1.2rem;
+}
+.auth-divider span {
+  flex: 1;
+  height: 1px;
+  background: var(--color-border-light);
+}
+.auth-divider p {
+  color: var(--color-text-on-light-muted);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.auth-social {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.auth-social-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1.6px solid var(--color-border-light);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-social-btn:hover {
+  border-color: var(--color-text-on-light-muted);
+}
+
+.auth-switch {
+  margin-top: 1.6rem;
+  color: var(--color-text-on-dark-muted);
+  font-size: 0.92rem;
+}
+.auth-switch a {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+.auth-switch a:hover {
+  text-decoration: underline;
+}

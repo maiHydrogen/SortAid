@@ -1,117 +1,133 @@
-import React, { useState ,useContext} from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
-import { Link } from "react-router-dom";
-import "./Register.css";
+import "./Auth.css";
 
 const Register = ({ onRegister }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [grades, setGrades] = useState("");
+  const [gpa, setGpa] = useState("");
   const [location, setLocation] = useState("");
   const [course, setCourse] = useState("");
+  const [interests, setInterests] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const{setUser}=useContext(UserContext);
+  const { setUser } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    setError("");
 
-  const userdata = {
-    name,
-    email,
-    password,
-    gpa: grades,
-    location,
-    course,
-  };
-  try {
-    console.log("sending data to backend",userdata);
-    const response = await fetch("http://localhost:8000/api/profile/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userdata),
-    });
+    const userData = { name, email, password, gpa, location, course };
 
-    const data = await response.json();
-    console.log("backend response",data);
-    if (response.ok) {
-      setUser(userdata);
-      onRegister();
-      navigate("/home");
-    } else {
-      alert(data.error || "Registration failed");
+    try {
+      const response = await fetch("http://localhost:8000/api/profile/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Persist the richer profile fields (gpa/course/location/interests)
+        // against the new user id, then finish onboarding.
+        await fetch("http://localhost:8000/api/profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: data.userId,
+            gpa: Number(gpa) || undefined,
+            course,
+            location,
+            interests: interests
+              .split(",")
+              .map((i) => i.trim())
+              .filter(Boolean),
+          }),
+        });
+
+        localStorage.setItem("userId", data.userId);
+        setUser(userData);
+        onRegister();
+        navigate("/home");
+      } else {
+        setError(data.error || "Registration failed");
+      }
+    } catch (err) {
+      console.error("Registration error:", err);
+      setError("Server error during registration");
     }
-  } catch (error) {
-    console.error("Registration error:", error);
-    alert("Server error during registration");
-  }
-  axios.post('http://localhost:8000/api/profile', {
-  userId: email,
-  gpa: grades,
-  course,
-  location,
-  interests: [],
-});
-};
+  };
 
   return (
-    <>
-    <div className="heading">
-      <h1>Don't have an account ?</h1>
-      <h1>No Worries, Register Now !</h1>
-      <p>Please provide the following details to register</p>
+    <div className="auth-page">
+      <div className="auth-heading">
+        <h1>Don't have an account ?</h1>
+        <h1>No Worries, Register Now !</h1>
+        <p>Please provide the following details to register</p>
+      </div>
+
+      <div className="auth-card">
+        <form onSubmit={handleSubmit} className="auth-form">
+          <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} required />
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <div className="auth-form-row">
+            <input
+              type="number"
+              step="0.01"
+              placeholder="Current GPA"
+              value={gpa}
+              onChange={(e) => setGpa(e.target.value)}
+              required
+            />
+            <input
+              type="text"
+              placeholder="Location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              required
+            />
+          </div>
+          <input
+            type="text"
+            placeholder="Course/Academic Major"
+            value={course}
+            onChange={(e) => setCourse(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Your Interests"
+            value={interests}
+            onChange={(e) => setInterests(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {error && <p className="auth-error">{error}</p>}
+          <button type="submit" className="auth-submit auth-submit--green">
+            Register
+          </button>
+        </form>
+      </div>
+
+      <p className="auth-switch">
+        Already have an account? <Link to="/login">Login</Link>
+      </p>
     </div>
-    <div className="register-container">
-      <form onSubmit={handleSubmit} className="register-form">
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="grades"
-          placeholder="GPA"
-          value={grades}
-          onChange={(e) => setGrades(e.target.value)}
-          required
-        />
-        <input
-          type="location"
-          placeholder="Location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          required
-        />
-        <input
-          type="course"
-          placeholder="Course"
-          value={course}
-          onChange={(e) => setCourse(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Register</button>
-      </form>
-      <p>Already have an account ? <Link to="/login">Login</Link></p>
-    </div>
-    </>
   );
 };
 
