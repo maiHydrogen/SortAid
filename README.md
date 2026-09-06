@@ -127,8 +127,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.
 
 ## Screenshots
 
-![Screenshot 2025-06-07 234636](https://github.com/user-attachments/assets/985b210e-ca7a-4a96-b479-9367e4538f45)
-![Screenshot 2025-06-07 234620](https://github.com/user-attachments/assets/0732ccb5-7f88-4596-97a8-8d56dd30e170)
-![Screenshot 2025-06-07 234607](https://github.com/user-attachments/assets/8f7dfa60-882d-4e09-8016-c7e2e702ab7e)
-
-*(from an earlier UI pass — due for a refresh since the frontend redesign)*
+<img width="1919" height="1034" alt="Screenshot 2026-09-07 030255" src="https://github.com/user-attachments/assets/2948651a-f13a-45be-a9e5-52df6fa55adf" />
+<img width="1918" height="1036" alt="Screenshot 2026-09-07 030310" src="https://github.com/user-attachments/assets/5bac9833-525e-45fb-bab3-eebb33c6db93" />
+<img width="1919" height="1026" alt="Screenshot 2026-09-07 030239" src="https://github.com/user-attachments/assets/b5149664-853d-48bf-98c2-c94756b1f27b" />
+<img width="1919" height="1034" alt="Screenshot 2026-09-07 030337" src="https://github.com/user-attachments/assets/6d83d786-0229-4436-ba40-4d35d98b8f9d" />
