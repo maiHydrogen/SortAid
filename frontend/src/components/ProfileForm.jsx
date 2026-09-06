@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "./UserContext";
+import { useEffect, useState } from "react";
+import { useUser } from "../context/UserContext";
 import { authFetch } from "../api";
 import "./ProfileForm.css";
 
@@ -7,7 +7,7 @@ import "./ProfileForm.css";
 // dropdown ("panel" variant) and full-width on the standalone /profile
 // page ("page" variant).
 const ProfileForm = ({ variant = "page" }) => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUser();
   const [form, setForm] = useState({
     name: "",
     email: "",

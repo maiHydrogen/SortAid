@@ -1,6 +1,6 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { UserContext } from "./UserContext";
+import { useUser } from "../context/UserContext";
 import { API_BASE_URL, authFetch } from "../api";
 import "./Auth.css";
 
@@ -15,7 +15,7 @@ const Register = ({ onRegister }) => {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
+  const { setUser } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,6 +35,7 @@ const Register = ({ onRegister }) => {
       if (response.ok) {
         localStorage.setItem("userId", data.userId);
         localStorage.setItem("token", data.token);
+        localStorage.setItem("isAdmin", String(Boolean(data.isAdmin)));
 
         // Persist the richer profile fields (gpa/course/location/interests)
         // against the new user, now that we're authenticated.

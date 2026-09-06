@@ -24,9 +24,10 @@ const Login = ({ onLogin }) => {
       const data = await response.json();
 
       if (response.ok) {
-        onLogin();
         localStorage.setItem("userId", data.userId);
         localStorage.setItem("token", data.token);
+        localStorage.setItem("isAdmin", String(Boolean(data.isAdmin)));
+        onLogin();
         navigate("/home");
       } else {
         setError(data.error || "Invalid credentials");

@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
 // Verifies the `Authorization: Bearer <token>` header and attaches the
 // decoded user id to req.userId. Routes that touch a specific user's data
@@ -31,4 +32,19 @@ function requireSelf(req, res, next) {
   next();
 }
 
-module.exports = { requireAuth, requireSelf };
+// Must run after requireAuth. Looks the user up fresh (rather than trusting
+// a flag baked into the token) so revoking admin access takes effect
+// immediately instead of waiting out the token's expiry.
+async function requireAdmin(req, res, next) {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user || !user.isAdmin) {
+      return res.status(403).json({ error: "Admin access required" });
+    }
+    next();
+  } catch (err) {
+    return res.status(500).json({ error: "Server error" });
+  }
+}
+
+module.exports = { requireAuth, requireSelf, requireAdmin };

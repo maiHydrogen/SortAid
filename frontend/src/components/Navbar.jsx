@@ -1,6 +1,6 @@
-import { useContext, useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { UserContext } from "./UserContext";
+import { useUser } from "../context/UserContext";
 import ProfileForm from "./ProfileForm";
 import { LogoMark, UserCircle } from "./icons";
 import "./Navbar.css";
@@ -12,9 +12,9 @@ const MINIMAL_ROUTES = ["/login", "/register"];
 // pages on the light surface use the dark-text/muted treatment.
 const DARK_SURFACE_ROUTES = ["/home", "/login", "/register"];
 
-const Navbar = ({ isAuthenticated }) => {
+const Navbar = ({ isAuthenticated, isAdmin }) => {
   const location = useLocation();
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   const [panelOpen, setPanelOpen] = useState(false);
   const panelRef = useRef(null);
 
@@ -66,6 +66,7 @@ const Navbar = ({ isAuthenticated }) => {
         <Link to="/home">Home</Link>
         <Link to="/scholarships">Find Scholarships</Link>
         <Link to="/about">About Us</Link>
+        {isAuthenticated && isAdmin && <Link to="/admin">Admin</Link>}
       </div>
 
       {isAuthenticated ? (

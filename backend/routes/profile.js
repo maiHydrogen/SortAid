@@ -17,7 +17,7 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
     const token = signToken(user._id.toString());
-    res.json({ message: "Login successful", userId: user._id, token });
+    res.json({ message: "Login successful", userId: user._id, token, isAdmin: user.isAdmin });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -39,7 +39,7 @@ router.post("/register", async (req, res) => {
     await newUser.save();
 
     const token = signToken(newUser._id.toString());
-    res.status(201).json({ message: "User registered", userId: newUser._id, token });
+    res.status(201).json({ message: "User registered", userId: newUser._id, token, isAdmin: newUser.isAdmin });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error during registration" });

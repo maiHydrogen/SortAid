@@ -1,0 +1,40 @@
+name: Scheduled Scrape
+
+on:
+  # Cron trigger disabled until MONGODB_URI is added as a repo secret —
+  # re-add a `schedule:` block here when ready to turn on scheduled runs.
+  # schedule:
+  #   - cron: "0 6 * * *"  # 06:00 UTC daily
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "Which source to scrape"
+        required: false
+        default: "all"
+        type: choice
+        options:
+          - all
+          - scholarships360
+          - internationalscholarships
+          - fastweb
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirement.txt
+      - name: Run scrapers
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: python -m scrapers.cli --source "${{ github.event.inputs.source || 'all' }}"
+      - name: Upload scrape log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraping-log
+          path: scraping.log
+          if-no-files-found: ignore
