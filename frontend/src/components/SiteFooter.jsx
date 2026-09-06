@@ -1,4 +1,3 @@
-import React from "react";
 import { GithubMark } from "./icons";
 import "./SiteFooter.css";
 

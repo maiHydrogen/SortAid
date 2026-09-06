@@ -4,7 +4,7 @@ import Register from './components/Register';
 import Profile from './components/Profile';
 import ScholarshipList from './components/ScholarshipList';
 import AboutUs from './components/AboutUs';
-import React , {useState} from 'react';
+import { useState } from 'react';
 import { Route ,Routes , Navigate } from 'react-router-dom'
 import HomePage from './components/HomePage';
 

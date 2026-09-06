@@ -1,7 +1,6 @@
 // Small shared icon set used across the revamped UI.
 // All icons are hand-drawn inline SVGs so the app has zero external asset
 // dependencies (no downloads, no licensing questions).
-import React from "react";
 
 export const LogoMark = ({ size = 22 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">

@@ -10,3 +10,6 @@ requests==2.32.4
 soupsieve==2.7
 typing_extensions==4.14.0
 urllib3==2.4.0
+
+# Dev-only, needed to run `pytest` (see scrapers/tests/)
+pytest==8.3.3

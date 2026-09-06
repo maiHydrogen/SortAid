@@ -48,16 +48,31 @@ Open the URL Vite prints (typically `http://localhost:5173`).
 
 ### 4. Scrapers (optional, populates real scholarship data)
 
+All three sources share one CLI entrypoint, run from the **repo root** (not from inside `scrapers/`):
+
 ```bash
-cd scrapers
 python -m venv .venv && source .venv/bin/activate   # or .venv\Scripts\activate on Windows
-pip install -r ../requirement.txt
-python scraper.py          # scholarships360.org
-python inscraper.py        # internationalscholarships.com
-python scraperfastweb.py   # fastweb.com
+pip install -r requirement.txt
+
+python -m scrapers.cli --source all                       # run every source
+python -m scrapers.cli --source scholarships360           # or just one
+python -m scrapers.cli --source internationalscholarships --full   # ignore saved resume progress
 ```
 
-Each script reads `MONGODB_URI` from `backend/.env` and writes into the `scholarships` collection. Respect each site's terms of service and `robots.txt`, and keep the built-in rate limiting (`time.sleep(...)`) in place — these are polite, low-volume scrapers, not high-throughput crawlers.
+It reads `MONGODB_URI` from `backend/.env` (or from the environment, if already set — that's what the CI schedule below uses) and writes into the `scholarships` collection, normalizing `amount`/`deadline` into `amountValue`/`deadlineDate` along the way. Respect each site's terms of service and `robots.txt`, and keep the built-in rate limiting (`time.sleep(...)`) in place — these are polite, low-volume scrapers, not high-throughput crawlers.
+
+Source code lives in `scrapers/sources/` (one module per site); `scrapers/base.py` holds the shared HTTP session/retry/logging/Mongo setup.
+
+## Tests & CI
+
+```bash
+cd backend && npm test      # Jest + Supertest, against an in-memory MongoDB
+pytest scrapers              # parsing-logic unit tests
+```
+
+`.github/workflows/ci.yml` runs backend tests, frontend lint+build, and the scraper tests on every push/PR to `main`.
+
+`.github/workflows/scrape.yml` runs the scraper CLI on a daily schedule (and via manual dispatch). It needs a `MONGODB_URI` repository secret (Settings → Secrets and variables → Actions) — it's not set up by this session, add it once you're ready to turn scheduled scraping on.
 
 ## Auth model
 

@@ -32,5 +32,7 @@ def parse_deadline(text):
         return None
     try:
         return date_parser.parse(text, fuzzy=True)
-    except (ValueError, OverflowError, TypeError):
+    except Exception:
+        # Malformed/non-date scraped text (e.g. "Rolling", "Varies") should
+        # never crash a scrape run — just treat it as unparseable.
         return None

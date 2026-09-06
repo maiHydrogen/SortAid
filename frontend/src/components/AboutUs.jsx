@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import SiteFooter from "./SiteFooter";
 import "./AboutUs.css";

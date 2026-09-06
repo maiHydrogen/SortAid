@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleMark, AppleMark } from "./icons";
 import { API_BASE_URL } from "../api";

@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronDoubleDown } from "./icons";
 import SiteFooter from "./SiteFooter";
