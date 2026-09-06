@@ -1,20 +1,23 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 const StudentProfile = require('../models/StudentProfile');
-module.exports=router;
+const User = require('../models/User');
+const { requireAuth, requireSelf } = require('../middleware/auth');
 
-const User = require("../models/User"); // assuming you have this
+const signToken = (userId) => jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
 // Login Route
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email, password });
-    if (!user) {
+    const user = await User.findOne({ email });
+    if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
-    res.json({ message: "Login successful", userId: user._id });
+    const token = signToken(user._id.toString());
+    res.json({ message: "Login successful", userId: user._id, token });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -31,27 +34,23 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ error: "User already exists" });
     }
 
-    const newUser = new User({
-      name,
-      email,
-      password, // ⚠ For security: hash this before storing in production!
-      gpa,
-      location,
-      course,
-    });
-
+    // Password is hashed automatically by the User model's pre-save hook.
+    const newUser = new User({ name, email, password, gpa, location, course });
     await newUser.save();
-    res.status(201).json({ message: "User registered", userId: newUser._id });
+
+    const token = signToken(newUser._id.toString());
+    res.status(201).json({ message: "User registered", userId: newUser._id, token });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error during registration" });
   }
 });
 
-// POST: Create or update a student profile
-router.post('/', async (req, res) => {
+// POST: Create or update the caller's own student profile
+router.post('/', requireAuth, async (req, res) => {
     try {
-        const { userId, gpa, course, location, interests } = req.body;
+        const { gpa, course, location, interests } = req.body;
+        const userId = req.userId;
         let profile = await StudentProfile.findOne({ userId });
 
         if (profile) {
@@ -72,8 +71,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-// GET: Retrieve a student profile
-router.get('/:userId', async (req, res) => {
+// GET: Retrieve a student profile (only your own)
+router.get('/:userId', requireAuth, requireSelf, async (req, res) => {
     try {
         const profile = await StudentProfile.findOne({ userId: req.params.userId });
         if (!profile) {
@@ -85,26 +84,23 @@ router.get('/:userId', async (req, res) => {
     }
 });
 
-// PUT: Update a student profile
-router.put('/:userId', async (req, res) => {
+// PUT: Update a student profile (only your own)
+router.put('/:userId', requireAuth, requireSelf, async (req, res) => {
     try {
         const { gpa, course, location, interests } = req.body;
         const profile = await StudentProfile.findOneAndUpdate(
             { userId: req.params.userId },
             { gpa, course, location, interests },
-            { new: true }
+            { new: true, upsert: true }
         );
-        if (!profile) {
-            return res.status(404).json({ error: 'Profile not found' });
-        }
         res.json(profile);
     } catch (err) {
         res.status(500).json({ error: 'Server error' });
     }
 });
 
-// DELETE: Delete a student profile
-router.delete('/:userId', async (req, res) => {
+// DELETE: Delete a student profile (only your own)
+router.delete('/:userId', requireAuth, requireSelf, async (req, res) => {
     try {
         const profile = await StudentProfile.findOneAndDelete({ userId: req.params.userId });
         if (!profile) {

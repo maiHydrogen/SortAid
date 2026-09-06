@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
+import { API_BASE_URL, authFetch } from "../api";
 import "./Auth.css";
 
 const Register = ({ onRegister }) => {
@@ -23,7 +24,7 @@ const Register = ({ onRegister }) => {
     const userData = { name, email, password, gpa, location, course };
 
     try {
-      const response = await fetch("http://localhost:8000/api/profile/register", {
+      const response = await fetch(`${API_BASE_URL}/api/profile/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -32,13 +33,14 @@ const Register = ({ onRegister }) => {
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("token", data.token);
+
         // Persist the richer profile fields (gpa/course/location/interests)
-        // against the new user id, then finish onboarding.
-        await fetch("http://localhost:8000/api/profile", {
+        // against the new user, now that we're authenticated.
+        await authFetch("/api/profile", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            userId: data.userId,
             gpa: Number(gpa) || undefined,
             course,
             location,
@@ -49,7 +51,6 @@ const Register = ({ onRegister }) => {
           }),
         });
 
-        localStorage.setItem("userId", data.userId);
         setUser(userData);
         onRegister();
         navigate("/home");

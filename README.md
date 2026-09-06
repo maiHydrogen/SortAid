@@ -1,7 +1,84 @@
 # SortAid
-A scholarship portal that scrapes available scholarships from the popular education portals, government website and scholarship platforms as per the students' profile.
+
+A scholarship portal that aggregates scholarships from education portals, government sites, and scholarship platforms, then matches them against a student's profile (GPA, course, location, interests).
+
+## Tech stack
+
+| Layer      | Tech |
+|------------|------|
+| Frontend   | React 19 (Vite), React Router |
+| Backend    | Node.js, Express 5, MongoDB (Mongoose), JWT auth (bcryptjs + jsonwebtoken) |
+| Scrapers   | Python, BeautifulSoup, Requests, PyMongo |
+
+## Project structure
+
+```
+backend/     Express REST API + Mongoose models
+frontend/    React (Vite) single-page app
+scrapers/    Standalone Python scripts that populate MongoDB with scholarship listings
+```
+
+## Getting started
+
+### 1. Database
+
+You need a MongoDB instance — either a local one or a free [MongoDB Atlas](https://www.mongodb.com/atlas) cluster.
+
+### 2. Backend
+
+```bash
+cd backend
+npm install
+cp .env.example .env   # then fill in MONGODB_URI, PORT, JWT_SECRET
+npm start
+```
+
+The API listens on `http://localhost:8000` by default (`PORT` in `.env`).
+
+### 3. Frontend
+
+```bash
+cd frontend
+npm install
+cp .env.example .env   # VITE_API_URL defaults to http://localhost:8000
+npm run dev
+```
+
+Open the URL Vite prints (typically `http://localhost:5173`).
+
+### 4. Scrapers (optional, populates real scholarship data)
+
+```bash
+cd scrapers
+python -m venv .venv && source .venv/bin/activate   # or .venv\Scripts\activate on Windows
+pip install -r ../requirement.txt
+python scraper.py          # scholarships360.org
+python inscraper.py        # internationalscholarships.com
+python scraperfastweb.py   # fastweb.com
+```
+
+Each script reads `MONGODB_URI` from `backend/.env` and writes into the `scholarships` collection. Respect each site's terms of service and `robots.txt`, and keep the built-in rate limiting (`time.sleep(...)`) in place — these are polite, low-volume scrapers, not high-throughput crawlers.
+
+## Auth model
+
+- Passwords are hashed with bcrypt before being stored (never in plaintext).
+- `POST /api/profile/login` and `POST /api/profile/register` return a JWT (`token`) alongside `userId`.
+- Every route that reads or writes a specific user's data requires `Authorization: Bearer <token>` and only allows a user to access their own resource — a token can't be used to read or edit someone else's profile.
+- Scholarship *browsing* routes (`GET /api/scholarships`, `GET /api/scholarships/:id`) are public by design; no login is required to see what's available.
+
+## Known gaps
+
+- The scholarship-creation/update/delete routes (`POST/PUT/DELETE /api/scholarships`) have no auth yet — there's no admin-role concept in the app. They're meant for internal/scraper use only; don't expose them to the public frontend as-is.
+- Scraped `amount`/`deadline` are free text; `amountValue`/`deadlineDate` are best-effort normalized fields populated by the scrapers (with a runtime fallback for older rows that predate them).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Screenshots
+
 ![Screenshot 2025-06-07 234636](https://github.com/user-attachments/assets/985b210e-ca7a-4a96-b479-9367e4538f45)
 ![Screenshot 2025-06-07 234620](https://github.com/user-attachments/assets/0732ccb5-7f88-4596-97a8-8d56dd30e170)
 ![Screenshot 2025-06-07 234607](https://github.com/user-attachments/assets/8f7dfa60-882d-4e09-8016-c7e2e702ab7e)
+
+*(from an earlier UI pass — due for a refresh since the frontend redesign)*

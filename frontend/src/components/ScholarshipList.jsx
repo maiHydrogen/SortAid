@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { ChevronRight, FunnelPlus, CircleX, KeyIcon } from "./icons";
+import { API_BASE_URL } from "../api";
 import "./ScholarshipList.css";
 
 const FILTER_CHIPS = ["GPA", "Course", "Location", "Amount", "Deadline", "Source"];
@@ -21,7 +22,7 @@ const ScholarshipList = () => {
   useEffect(() => {
     const fetchScholarships = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/scholarships");
+        const response = await fetch(`${API_BASE_URL}/api/scholarships`);
         if (!response.ok) throw new Error("Request failed");
         const data = await response.json();
         setScholarships(Array.isArray(data) ? data : []);

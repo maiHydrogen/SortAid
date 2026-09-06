@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
+import { authFetch } from "../api";
 import "./ProfileForm.css";
 
 // Shared edit-info form: rendered both inline in the Navbar's profile
@@ -29,7 +30,7 @@ const ProfileForm = ({ variant = "page" }) => {
 
   useEffect(() => {
     if (!userId) return;
-    fetch(`http://localhost:8000/api/profile/${userId}`)
+    authFetch(`/api/profile/${userId}`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (!data) return;
@@ -53,9 +54,8 @@ const ProfileForm = ({ variant = "page" }) => {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:8000/api/profile/${userId}`, {
+      const res = await authFetch(`/api/profile/${userId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           gpa: Number(form.gpa) || undefined,
           location: form.location,

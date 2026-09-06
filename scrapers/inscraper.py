@@ -11,9 +11,10 @@ from urllib.parse import urljoin
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 import math
+from parsing_utils import parse_amount, parse_deadline
 
 # Load environment variables from .env file located in the parent directory
-env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'backend\.env')
+env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'backend', '.env')
 if not os.path.exists(env_path):
     logging.error(f".env file not found at {env_path}")
     raise FileNotFoundError(f".env file not found at {env_path}")
@@ -213,8 +214,10 @@ def scrape_scholarship_details(scholarship_title, scholarship_url):
             'title': scholarship_title,
             'source': source,
             'amount': amount,
+            'amountValue': parse_amount(amount),
             'eligibility': eligibility,
             'deadline': deadline,
+            'deadlineDate': parse_deadline(deadline),
             'applicationLink': scholarship_url,
             'scrapedAt': datetime.now(timezone.utc)  # Use UTC time for consistency
         }

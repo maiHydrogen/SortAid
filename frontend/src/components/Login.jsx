@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleMark, AppleMark } from "./icons";
+import { API_BASE_URL } from "../api";
 import "./Auth.css";
 
 const Login = ({ onLogin }) => {
@@ -14,7 +15,7 @@ const Login = ({ onLogin }) => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/profile/login", {
+      const response = await fetch(`${API_BASE_URL}/api/profile/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -25,6 +26,7 @@ const Login = ({ onLogin }) => {
       if (response.ok) {
         onLogin();
         localStorage.setItem("userId", data.userId);
+        localStorage.setItem("token", data.token);
         navigate("/home");
       } else {
         setError(data.error || "Invalid credentials");

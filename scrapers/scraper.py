@@ -7,9 +7,10 @@ import logging
 import os
 from dotenv import load_dotenv
 from pymongo.errors import ConnectionFailure, BulkWriteError
+from parsing_utils import parse_amount, parse_deadline
 
 # Load environment variables from .env file located in the parent directory
-env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'backend\.env')
+env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'backend', '.env')
 if not os.path.exists(env_path):
     logging.error(f".env file not found at {env_path}")
     raise FileNotFoundError(f".env file not found at {env_path}")
@@ -102,6 +103,11 @@ def scrape_scholarships_from_page(url):
             }
             #application link
             scholarship['applicationLink'] = 'https://scholarships360.org/scholarships/search/'
+
+            # Normalized fields so the matching API doesn't have to re-parse
+            # these display strings on every request.
+            scholarship['amountValue'] = parse_amount(scholarship['amount'])
+            scholarship['deadlineDate'] = parse_deadline(scholarship['deadline'])
 
             # Scraped timestamp
             scholarship['scrapedAt'] = datetime.now()
